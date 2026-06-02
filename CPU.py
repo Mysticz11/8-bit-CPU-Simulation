@@ -78,6 +78,9 @@ class CPU:
         # Get the instruction
         instruction = self.decode()
 
+        # Used for the debugger
+        self.last_instruction = instruction
+
         # Fat if-else with all the instructions
         # There has to be something else thats more efficient than this, but our instruction set is small enough.
 
@@ -142,14 +145,40 @@ class CPU:
 
     # The running loop
     # We dont see decode because execute will call it by defualt
-    def run(self):
+    def run(self, debug = False):
         while self.running:
             self.fetch()
             self.execute()
-
-
+            if debug:
+                print(self.__str__())
+                command = input("Enter = next, r = run to the end, q = quit: ")
+                if command == 'q':
+                    break
+                elif command == 'r':
+                    debug = False
         
-            
+    def __str__(self):
+        build = "──────────────────────────────────\n"
+
+        build += f"Instruction: {self.last_instruction} {self.arg1} {self.arg2}\n"
+        build += f"R0 = {self.reg.read('R0')} R1 = {self.reg.read('R1')} R2 = {self.reg.read('R2')} R3 = {self.reg.read('R3')}\n"
+        build += f"Flags: Z = {self.reg.get_flag('Z')}  C = {self.reg.get_flag('C')}  N = {self.reg.get_flag('N')}\n"
+        
+        pc = self.reg.read('PC')
+        next_opcode = self.memory.read(pc)
+
+        if next_opcode in self.OPCODES:
+            next_arg1 = self.memory.read(pc + 1)
+            next_arg2 = self.memory.read(pc + 2)
+
+            build += f"Next: {self.OPCODES[next_opcode]} {next_arg1} {next_arg2}"
+        else:
+            build += f"Next opcode: {next_opcode} is not a recognized instruction"
+
+        build += "\n──────────────────────────────────"
+
+
+        return build
 
                 
                 

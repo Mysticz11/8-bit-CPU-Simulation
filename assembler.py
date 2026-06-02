@@ -31,13 +31,32 @@ class Assembler():
         # list that will be extended then returned
         program = []
 
+        self.labels = {}
+
         # New list that contains the source code but splits it by spaces
-        # So we get each 3-bit instruction alone
+        # So we get each 3-byte instruction alone
         # This still includes commas and is in the string format
         lines = source_code.strip().split("\n")
+
+        # This is where we find the labels and add them into a dict that contains their address
+        address = 0
+        for line in lines:
+            bare = line.strip()
+            if bare.endswith(':'):
+                label_name = bare[:-1]
+                self.labels[label_name] = (address)
+            else:
+                address += 3
+
         
         # Iterates through the list (lines) and extends the program list with the converted version
         for line in lines:
+            bare = line.strip()
+
+            # Makes sure we dont count the labels and just skip past them
+            if bare.endswith(':'):
+                continue
+
             program.extend(self._parse_line(line))
 
         # Returns the bytes representation to be used
@@ -69,7 +88,7 @@ class Assembler():
         if len(parts) > 2:
             arg2 = self._parse_argument(parts[2])
 
-        # Returns the three bit representation
+        # Returns the three byte representation
         return [opcode, arg1, arg2]
     
 
@@ -81,6 +100,9 @@ class Assembler():
         # Checks if its a register and returns the byte representation
         if arg in self.register_map:
             return self.register_map[arg]
+        # Checks if its in the labels dictionary, upon which it returns the address associated with the branching/jumping
+        if arg in self.labels:
+            return self.labels[arg]
         # This is only here because conventions with looping usually uses hexadecimal
         # Will convert it to int
         if arg.startswith('0x'):
