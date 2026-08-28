@@ -1,11 +1,12 @@
-Bit CPU Simulator
+# 8-Bit CPU Simulator
 
 A fully functional 8-bit CPU simulator built from scratch in Python, featuring a custom assembler with label support, a step-through debugger, and a stack-based subroutine system. Built to deeply understand how computers execute instructions at the hardware level — from raw bytes in memory to a working fetch-decode-execute cycle.
 
-Architecture
+## Architecture
 
 Von Neumann architecture with a single 256-byte memory space shared between instructions and data.
 
+```
 ┌────────────────────────────────────────────────────┐
 │                        CPU                         │
 │                                                    │
@@ -23,63 +24,76 @@ Von Neumann architecture with a single 256-byte memory space shared between inst
 │  ...                                               │
 │  0xFF ─── Stack (grows downward)                    │
 └────────────────────────────────────────────────────┘
-Features
-Fetch-Decode-Execute Cycle: Instructions are fetched from memory, decoded via opcode lookup, and executed — the same fundamental cycle every CPU uses.
-Custom Assembler: Translates human-readable assembly into machine code using a two-pass algorithm. First pass resolves label addresses, second pass generates bytecode.
-Label Support: Write JMP loop instead of manually calculating JMP 6. The assembler handles address resolution automatically.
-Step-Through Debugger: Execute one instruction at a time and inspect registers, flags, and memory state at each step.
-Stack & Subroutines: PUSH/POP for saving and restoring register values, CALL/RET for reusable subroutine calls with automatic return address management.
-CLI Interface: Load .asm files from the command line with optional debug mode.
-Instruction Set (21 instructions)
-Opcode	Instruction	Arguments	Description
-0x00	NOP	—	No operation
-0x01	LOAD	Rn, value	Load immediate value into register
-0x02	MOV	Rn, Rm	Copy value from Rm to Rn
-0x03	STORE	Rn, addr	Store register value to memory address
-0x04	ADD	Rn, Rm	Add Rn + Rm, result in R0
-0x05	SUB	Rn, Rm	Subtract Rn - Rm, result in R0
-0x06	CMP	Rn, Rm	Compare (subtract without storing), updates flags only
-0x07	JMP	addr	Unconditional jump
-0x08	JZ	addr	Jump if zero flag is set
-0x09	JNZ	addr	Jump if zero flag is not set
-0x0A	AND	Rn, Rm	Bitwise AND, result in R0
-0x0B	OR	Rn, Rm	Bitwise OR, result in R0
-0x0C	XOR	Rn, Rm	Bitwise XOR, result in R0
-0x0D	NOT	Rn	Bitwise NOT, result in R0
-0x0E	SHL	Rn	Shift left by 1, result in R0
-0x0F	SHR	Rn	Shift right by 1, result in R0
-0x20	LOAD_MEM	Rn, addr	Load value from memory address into register
-0x21	PUSH	Rn	Push register value onto stack
-0x22	POP	Rn	Pop top of stack into register
-0x23	CALL	addr	Push return address, jump to subroutine
-0x24	RET	—	Pop return address, jump back to caller
-0xFF	HLT	—	Halt execution
-Flags
-Flag	Name	Set When
-Z	Zero	Result of last ALU operation was 0
-C	Carry	Unsigned overflow (above 255) or underflow (below 0)
-N	Negative	Bit 7 of the result is set
-Usage
+```
+
+## Features
+
+- **Fetch-Decode-Execute Cycle**: Instructions are fetched from memory, decoded via opcode lookup, and executed — the same fundamental cycle every CPU uses.
+- **Custom Assembler**: Translates human-readable assembly into machine code using a two-pass algorithm. First pass resolves label addresses, second pass generates bytecode.
+- **Label Support**: Write `JMP loop` instead of manually calculating `JMP 6`. The assembler handles address resolution automatically.
+- **Step-Through Debugger**: Execute one instruction at a time and inspect registers, flags, and memory state at each step.
+- **Stack & Subroutines**: PUSH/POP for saving and restoring register values, CALL/RET for reusable subroutine calls with automatic return address management.
+- **CLI Interface**: Load `.asm` files from the command line with optional debug mode.
+
+## Instruction Set (21 instructions)
+
+| Opcode | Instruction | Arguments | Description |
+|--------|------------|-----------|-------------|
+| 0x00 | NOP | — | No operation |
+| 0x01 | LOAD | Rn, value | Load immediate value into register |
+| 0x02 | MOV | Rn, Rm | Copy value from Rm to Rn |
+| 0x03 | STORE | Rn, addr | Store register value to memory address |
+| 0x04 | ADD | Rn, Rm | Add Rn + Rm, result in R0 |
+| 0x05 | SUB | Rn, Rm | Subtract Rn - Rm, result in R0 |
+| 0x06 | CMP | Rn, Rm | Compare (subtract without storing), updates flags only |
+| 0x07 | JMP | addr | Unconditional jump |
+| 0x08 | JZ | addr | Jump if zero flag is set |
+| 0x09 | JNZ | addr | Jump if zero flag is not set |
+| 0x0A | AND | Rn, Rm | Bitwise AND, result in R0 |
+| 0x0B | OR | Rn, Rm | Bitwise OR, result in R0 |
+| 0x0C | XOR | Rn, Rm | Bitwise XOR, result in R0 |
+| 0x0D | NOT | Rn | Bitwise NOT, result in R0 |
+| 0x0E | SHL | Rn | Shift left by 1, result in R0 |
+| 0x0F | SHR | Rn | Shift right by 1, result in R0 |
+| 0x20 | LOAD_MEM | Rn, addr | Load value from memory address into register |
+| 0x21 | PUSH | Rn | Push register value onto stack |
+| 0x22 | POP | Rn | Pop top of stack into register |
+| 0x23 | CALL | addr | Push return address, jump to subroutine |
+| 0x24 | RET | — | Pop return address, jump back to caller |
+| 0xFF | HLT | — | Halt execution |
+
+## Flags
+
+| Flag | Name | Set When |
+|------|------|----------|
+| Z | Zero | Result of last ALU operation was 0 |
+| C | Carry | Unsigned overflow (above 255) or underflow (below 0) |
+| N | Negative | Bit 7 of the result is set |
+
+## Usage
 
 Run a program:
-
+```
 python main.py programs/countdown.asm
+```
 
 Run with step-through debugger:
-
+```
 python main.py programs/countdown.asm --debug
+```
 
 Debugger controls:
+- `Enter` — execute next instruction
+- `r` — run to completion
+- `q` — quit
+- `m` — show full memory dump
 
-Enter — execute next instruction
-r — run to completion
-q — quit
-m — show full memory dump
-Example Programs
-Countdown (programs/countdown.asm)
+## Example Programs
 
+### Countdown (programs/countdown.asm)
 Counts down from 5 to 0 using SUB and conditional branching.
 
+```
 LOAD R0, 5
 LOAD R1, 1
 loop:
@@ -88,10 +102,12 @@ JZ end
 JMP loop
 end:
 HLT
-Multiplication (programs/multiply.asm)
+```
 
+### Multiplication (programs/multiply.asm)
 Multiplies 3 × 4 through repeated addition. Demonstrates PUSH/POP for register preservation when the accumulator is needed for multiple operations.
 
+```
 LOAD R0, 0
 LOAD R1, 3
 LOAD R2, 4
@@ -107,15 +123,17 @@ JMP loop
 done:
 STORE R0, 0x80
 HLT
-Fibonacci (programs/fibonacci.asm)
+```
 
+### Fibonacci (programs/fibonacci.asm)
 Computes the first 7 Fibonacci numbers and stores them sequentially in memory starting at address 0x80. Uses LOAD_MEM and STORE to read computed values back from memory for the next computation.
 
-Subroutine Call (programs/subroutine.asm)
+### Subroutine Call (programs/subroutine.asm)
+Demonstrates CALL/RET by defining a reusable `add_r1` subroutine that adds R1 to R0. The subroutine is called twice from different points in the program, with RET correctly returning to each call site.
 
-Demonstrates CALL/RET by defining a reusable add_r1 subroutine that adds R1 to R0. The subroutine is called twice from different points in the program, with RET correctly returning to each call site.
+## Project Structure
 
-Project Structure
+```
 ├── main.py          Entry point and CLI interface
 ├── CPU.py           Fetch-decode-execute cycle and instruction execution
 ├── ALU.py           Arithmetic and bitwise operations with flag updates
@@ -123,11 +141,15 @@ Project Structure
 ├── Registers.py     General purpose and special registers with flags
 ├── assembler.py     Two-pass assembler with label resolution
 └── programs/        Example assembly programs
-Design Decisions
-Von Neumann over Harvard: Single memory space for both instructions and data. Simpler implementation and matches how most real CPUs work. Harvard's parallel access advantage doesn't apply in a sequential simulation.
-Fixed 3-byte instructions: Every instruction is exactly 3 bytes (opcode + arg1 + arg2). Wastes some memory on padding but simplifies the fetch cycle — PC always increments by 3.
-R0 as accumulator: All ALU results go to R0 by default, eliminating the need for a separate ACC register. Tradeoff is that programs must save R0 (via PUSH) before operations that would overwrite it.
-8-bit data, 8-bit addresses: Keeps the address space small (256 bytes) for easy debugging and memory inspection. Real 8-bit CPUs typically used 16-bit addresses for more memory.
-Built With
+```
 
-Python 3 — no external dependencies. Every component (CPU, ALU, memory, registers, assembler) is implemented from scratch
+## Design Decisions
+
+- **Von Neumann over Harvard**: Single memory space for both instructions and data. Simpler implementation and matches how most real CPUs work. Harvard's parallel access advantage doesn't apply in a sequential simulation.
+- **Fixed 3-byte instructions**: Every instruction is exactly 3 bytes (opcode + arg1 + arg2). Wastes some memory on padding but simplifies the fetch cycle — PC always increments by 3.
+- **R0 as accumulator**: All ALU results go to R0 by default, eliminating the need for a separate ACC register. Tradeoff is that programs must save R0 (via PUSH) before operations that would overwrite it.
+- **8-bit data, 8-bit addresses**: Keeps the address space small (256 bytes) for easy debugging and memory inspection. Real 8-bit CPUs typically used 16-bit addresses for more memory.
+
+## Built With
+
+Python 3 — no external dependencies. Every component (CPU, ALU, memory, registers, assembler) is implemented from scratch.
