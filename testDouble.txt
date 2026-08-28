@@ -1,0 +1,8 @@
+LOAD R0, 5
+CALL double
+STORE R0, 0x80
+HLT
+
+double:
+ADD R0, R0
+RET
