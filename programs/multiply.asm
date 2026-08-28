@@ -5,8 +5,7 @@ LOAD R3, 1
 loop:
 ADD R0, R1
 PUSH R0
-MOV R0, R2
-SUB R0, R3
+SUB R2, R3
 MOV R2, R0
 POP R0
 JZ done

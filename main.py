@@ -3,8 +3,8 @@ from CPU import CPU
 from assembler import Assembler
 
 # Lets us chagne the program run from the terminal insteaf of changing the file path each time
-# RUN WITH python main.py theStuff.txt --debug
-
+# RUN WITH python main.py programs/program_name.asm --debug
+# Remove the --debug if you dont want it.
 
 # This is the parser object
 parser = argparse.ArgumentParser(description="8-bit CPU Simulator")
@@ -34,10 +34,10 @@ cpu.load_program(program)
 
 cpu.run(debug = args.debug)
 
-print(f"R0: {cpu.reg.read('R0')}")  # Should be 0
-print(f"R1: {cpu.reg.read('R1')}")  # Should be 1
-print(f"Z flag: {cpu.reg.get_flag('Z')}")  # Should be 1 (last SUB resulted in 0)
-print(f"C flag: {cpu.reg.get_flag('C')}")  # Should be 0
-print(f"N flag: {cpu.reg.get_flag('N')}")  # Should be 0
+print(f"R0: {cpu.reg.read('R0')}")  
+print(f"R1: {cpu.reg.read('R1')}")  
+print(f"Z flag: {cpu.reg.get_flag('Z')}")  
+print(f"C flag: {cpu.reg.get_flag('C')}")  
+print(f"N flag: {cpu.reg.get_flag('N')}")  
 
 # print(cpu.memory)

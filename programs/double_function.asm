@@ -1,0 +1,11 @@
+LOAD R0, 5
+LOAD R1, 10
+CALL add_r1
+STORE R0, 0x80
+CALL add_r1
+STORE R0, 0x81
+HLT
+
+add_r1:
+ADD R0, R1
+RET

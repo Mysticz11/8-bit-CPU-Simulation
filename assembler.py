@@ -54,9 +54,11 @@ class Assembler():
         address = 0
         for line in lines:
             bare = line.strip()
-            if bare.endswith(':'):
-                label_name = bare[:-1]
-                self.labels[label_name] = (address)
+            if bare == '' or bare.endswith(':'):
+                if bare.endswith(':'):
+                    label_name = bare[:-1]
+                    self.labels[label_name] = (address)
+                continue
             else:
                 address += 3
 
@@ -66,7 +68,7 @@ class Assembler():
             bare = line.strip()
 
             # Makes sure we dont count the labels and just skip past them
-            if bare.endswith(':'):
+            if bare == '' or bare.endswith(':'):
                 continue
 
             program.extend(self._parse_line(line))

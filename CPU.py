@@ -6,30 +6,30 @@ class CPU:
     def __init__(self):
         # This is the instruction set
         # Each hexa corresponds to a action
-    self.OPCODES = {
-        0x00: 'NOP',
-        0x01: 'LOAD',
-        0x02: 'MOV',
-        0x03: 'STORE',
-        0x04: 'ADD',
-        0x05: 'SUB',
-        0x06: 'CMP',
-        0x07: 'JMP',
-        0x08: 'JZ',
-        0x09: 'JNZ',
-        0x0A: 'AND',
-        0x0B: 'OR',
-        0x0C: 'XOR',
-        0x0D: 'NOT',
-        0x0E: 'SHL',
-        0x0F: 'SHR',
-        0x20: 'LOAD_MEM',
-        0x21: 'PUSH',
-        0x22: 'POP',
-        0x23: 'CALL',
-        0x24: 'RET',
-        0xFF: 'HLT',
-    }
+        self.OPCODES = {
+            0x00: 'NOP',
+            0x01: 'LOAD',
+            0x02: 'MOV',
+            0x03: 'STORE',
+            0x04: 'ADD',
+            0x05: 'SUB',
+            0x06: 'CMP',
+            0x07: 'JMP',
+            0x08: 'JZ',
+            0x09: 'JNZ',
+            0x0A: 'AND',
+            0x0B: 'OR',
+            0x0C: 'XOR',
+            0x0D: 'NOT',
+            0x0E: 'SHL',
+            0x0F: 'SHR',
+            0x20: 'LOAD_MEM',
+            0x21: 'PUSH',
+            0x22: 'POP',
+            0x23: 'CALL',
+            0x24: 'RET',
+            0xFF: 'HLT',
+        }
         
 
         # Used for the HLT
@@ -185,16 +185,19 @@ class CPU:
             result = self.alu.shiftr(value)
             self.reg.write('R0', result)
 
+        # Reads a value from a memory address into a register
         elif instruction == 'LOAD_MEM':
             value = self.memory.read(self.arg2)
             self.reg.write(f"R{self.arg1}", value)
-        
+
+        # Takes a register's value and puts it on the stack
         elif instruction == 'PUSH':
             value = self.reg.read(f"R{self.arg1}")
             sp = self.reg.read('SP')        
             self.memory.write(sp, value)
             self.reg.write('SP', sp - 1)
-        
+
+        # Takes the top value off the stack and puts it in a register
         elif instruction == 'POP':
             sp = self.reg.read('SP')  
 
@@ -203,14 +206,18 @@ class CPU:
                 value = self.memory.read(sp)
                 self.reg.write(f"R{self.arg1}", value)
                 self.reg.write('SP', sp)
-        
+
+        # Function call. 
+        # Saves where to come back to (the current PC) on the stack, then jumps to the function's address.
         elif instruction == 'CALL':
             pc = self.reg.read('PC')
             sp = self.reg.read('SP')    
             self.memory.write(sp, pc)
             self.reg.write('PC', self.arg1)
             self.reg.write('SP', sp - 1)
-            
+
+        # Return from function. 
+        # Pops the saved PC off the stack and jumps back
         elif instruction == 'RET':
             sp = self.reg.read('SP') + 1
             new_pc = self.memory.read(sp)
@@ -227,13 +234,16 @@ class CPU:
         while self.running:
             self.fetch()
             self.execute()
-            if debug:
+            # Add in the self.running for HLT, otherwise it shows the next instruction as NOP
+            if debug & self.running:
                 print(self.__str__())
-                command = input("Enter = next, r = run to the end, q = quit: ")
+                command = input("Enter = next, r = run to the end, m = see memory, q = quit: ")
                 if command == 'q':
                     break
                 elif command == 'r':
                     debug = False
+                elif command == 'm':
+                    print(self.memory)
         
     def __str__(self):
         build = "──────────────────────────────────\n"
