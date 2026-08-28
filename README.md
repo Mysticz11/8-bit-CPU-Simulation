@@ -1,6 +1,9 @@
 # 8-Bit CPU Simulator
 
-A fully functional 8-bit CPU simulator built from scratch in Python, featuring a custom assembler with label support, a step-through debugger, and a stack-based subroutine system. Built to deeply understand how computers execute instructions at the hardware level — from raw bytes in memory to a working fetch-decode-execute cycle.
+An 8-bit CPU simulator written from scratch in Python. The project includes a custom instruction set, assembler, debugger, and stack-based subroutine support.
+
+The CPU uses a 256-byte memory space and implements a basic fetch-decode-execute cycle, allowing assembly programs to be loaded and executed instruction by instruction.
+
 
 ## Architecture
 
@@ -10,32 +13,33 @@ Von Neumann architecture with a single 256-byte memory space shared between inst
 ┌────────────────────────────────────────────────────┐
 │                        CPU                         │
 │                                                    │
-│  Registers          ALU            Control Unit     │
-│  R0 (ACC), R1      ADD, SUB        Fetch            │
-│  R2, R3            AND, OR, XOR    Decode            │
-│  PC, IR            NOT, SHL, SHR   Execute           │
-│  SP, FLAGS         CMP                              │
+│  Registers          ALU            Control Unit    │
+│  R0 (ACC), R1      ADD, SUB        Fetch           │
+│  R2, R3            AND, OR, XOR    Decode          │
+│  PC, IR            NOT, SHL, SHR   Execute         │
+│  SP, FLAGS         CMP                             │
 │                                                    │
 ├────────────────────────────────────────────────────┤
-│                    Memory (256 bytes)               │
-│  0x00 ─── Program instructions (grows upward)       │
+│                    Memory (256 bytes)              │
+│  0x00 ─── Program instructions (grows upward)      │
 │  ...                                               │
-│  0x80 ─── Data storage                              │
+│  0x80 ─── Data storage                             │
 │  ...                                               │
-│  0xFF ─── Stack (grows downward)                    │
+│  0xFF ─── Stack (grows downward)                   │
 └────────────────────────────────────────────────────┘
 ```
 
 ## Features
 
-- **Fetch-Decode-Execute Cycle**: Instructions are fetched from memory, decoded via opcode lookup, and executed — the same fundamental cycle every CPU uses.
+- **Fetch-Decode-Execute Cycle**: Instructions are fetched from memory, decoded via opcode lookup, and executed. This follows the same fundamental cycle every CPU uses.
 - **Custom Assembler**: Translates human-readable assembly into machine code using a two-pass algorithm. First pass resolves label addresses, second pass generates bytecode.
 - **Label Support**: Write `JMP loop` instead of manually calculating `JMP 6`. The assembler handles address resolution automatically.
-- **Step-Through Debugger**: Execute one instruction at a time and inspect registers, flags, and memory state at each step.
-- **Stack & Subroutines**: PUSH/POP for saving and restoring register values, CALL/RET for reusable subroutine calls with automatic return address management.
-- **CLI Interface**: Load `.asm` files from the command line with optional debug mode.
+- **Debugger**: Execute one instruction at a time, inspecting registers, flags, and memory state at each step.
+- **Stack operations**: PUSH/POP for saving and restoring register values, CALL/RET for reusable subroutine calls with automatic return address management.
+- **CLI Interface**: Load `.asm` files from the command line with an optional debug mode.
 
-## Instruction Set (21 instructions)
+## Instruction Set
+The CPU currently supports 21 instructions, including arithmetic, bitwise operations, memory access, branching, and stack operations.
 
 | Opcode | Instruction | Arguments | Description |
 |--------|------------|-----------|-------------|
@@ -83,10 +87,10 @@ python main.py programs/countdown.asm --debug
 ```
 
 Debugger controls:
-- `Enter` — execute next instruction
-- `r` — run to completion
-- `q` — quit
-- `m` — show full memory dump
+- `Enter`: Execute next instruction
+- `r`: Run to completion
+- `q`: Quit
+- `m`: Show full memory dump
 
 ## Example Programs
 
@@ -105,7 +109,7 @@ HLT
 ```
 
 ### Multiplication (programs/multiply.asm)
-Multiplies 3 × 4 through repeated addition. Demonstrates PUSH/POP for register preservation when the accumulator is needed for multiple operations.
+Multiplies 3 × 4 through repeated addition, demonstrating PUSH/POP for register preservation when the accumulator is required for multiple operations.
 
 ```
 LOAD R0, 0
@@ -152,4 +156,4 @@ Demonstrates CALL/RET by defining a reusable `add_r1` subroutine that adds R1 to
 
 ## Built With
 
-Python 3 — no external dependencies. Every component (CPU, ALU, memory, registers, assembler) is implemented from scratch.
+Python 3 without any external dependencies. All components (CPU, ALU, memory, registers, assembler) is implemented from scratch within the project.
