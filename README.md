@@ -31,7 +31,7 @@ Von Neumann architecture with a single 256-byte memory space shared between inst
 
 ## Features
 
-- **Fetch-Decode-Execute Cycle**: Instructions are fetched from memory, decoded via opcode lookup, and executed. This follows the same fundamental cycle every CPU uses.
+- **Fetch-Decode-Execute Cycle**: Instructions are fetched from memory, decoded via opcode lookup, and executed. 
 - **Custom Assembler**: Translates human-readable assembly into machine code using a two-pass algorithm. First pass resolves label addresses, second pass generates bytecode.
 - **Label Support**: Write `JMP loop` instead of manually calculating `JMP 6`. The assembler handles address resolution automatically.
 - **Debugger**: Execute one instruction at a time, inspecting registers, flags, and memory state at each step.
@@ -39,7 +39,7 @@ Von Neumann architecture with a single 256-byte memory space shared between inst
 - **CLI Interface**: Load `.asm` files from the command line with an optional debug mode.
 
 ## Instruction Set
-The CPU currently supports 21 instructions, including arithmetic, bitwise operations, memory access, branching, and stack operations.
+The CPU currently supports 22 instructions, including arithmetic, bitwise operations, memory access, branching, and stack operations.
 
 | Opcode | Instruction | Arguments | Description |
 |--------|------------|-----------|-------------|
@@ -47,8 +47,8 @@ The CPU currently supports 21 instructions, including arithmetic, bitwise operat
 | 0x01 | LOAD | Rn, value | Load immediate value into register |
 | 0x02 | MOV | Rn, Rm | Copy value from Rm to Rn |
 | 0x03 | STORE | Rn, addr | Store register value to memory address |
-| 0x04 | ADD | Rn, Rm | Add Rn + Rm, result in R0 |
-| 0x05 | SUB | Rn, Rm | Subtract Rn - Rm, result in R0 |
+| 0x04 | ADD | Rn, Rm | Add Rn + Rm, stores the result in R0 |
+| 0x05 | SUB | Rn, Rm | Subtract Rn - Rm, stores the result in R0 |
 | 0x06 | CMP | Rn, Rm | Compare (subtract without storing), updates flags only |
 | 0x07 | JMP | addr | Unconditional jump |
 | 0x08 | JZ | addr | Jump if zero flag is set |
@@ -156,4 +156,4 @@ Demonstrates CALL/RET by defining a reusable `add_r1` subroutine that adds R1 to
 
 ## Built With
 
-Python 3 without any external dependencies. All components (CPU, ALU, memory, registers, assembler) is implemented from scratch within the project.
+Python 3 without any external dependencies. All components (CPU, ALU, memory, registers, assembler) are implemented from scratch within the project.
