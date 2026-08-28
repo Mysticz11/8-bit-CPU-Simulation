@@ -43,7 +43,7 @@ The CPU currently supports 22 instructions, including arithmetic, bitwise operat
 
 | Opcode | Instruction | Arguments | Description |
 |--------|------------|-----------|-------------|
-| 0x00 | NOP | — | No operation |
+| 0x00 | NOP | N/A | No operation |
 | 0x01 | LOAD | Rn, value | Load immediate value into register |
 | 0x02 | MOV | Rn, Rm | Copy value from Rm to Rn |
 | 0x03 | STORE | Rn, addr | Store register value to memory address |
@@ -63,8 +63,8 @@ The CPU currently supports 22 instructions, including arithmetic, bitwise operat
 | 0x21 | PUSH | Rn | Push register value onto stack |
 | 0x22 | POP | Rn | Pop top of stack into register |
 | 0x23 | CALL | addr | Push return address, jump to subroutine |
-| 0x24 | RET | — | Pop return address, jump back to caller |
-| 0xFF | HLT | — | Halt execution |
+| 0x24 | RET | N/A | Pop return address, jump back to caller |
+| 0xFF | HLT | N/A | Halt execution |
 
 ## Flags
 
@@ -150,7 +150,7 @@ Demonstrates CALL/RET by defining a reusable `add_r1` subroutine that adds R1 to
 ## Design Decisions
 
 - **Von Neumann over Harvard**: Single memory space for both instructions and data. Simpler implementation and matches how most real CPUs work. Harvard's parallel access advantage doesn't apply in a sequential simulation.
-- **Fixed 3-byte instructions**: Every instruction is exactly 3 bytes (opcode + arg1 + arg2). Wastes some memory on padding but simplifies the fetch cycle — PC always increments by 3.
+- **Fixed 3-byte instructions**: Every instruction is exactly 3 bytes (opcode + arg1 + arg2). Wastes some memory on padding but simplifies the fetch cycle, PC always increments by 3.
 - **R0 as accumulator**: All ALU results go to R0 by default, eliminating the need for a separate ACC register. Tradeoff is that programs must save R0 (via PUSH) before operations that would overwrite it.
 - **8-bit data, 8-bit addresses**: Keeps the address space small (256 bytes) for easy debugging and memory inspection. Real 8-bit CPUs typically used 16-bit addresses for more memory.
 
