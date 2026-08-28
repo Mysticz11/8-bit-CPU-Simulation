@@ -7,29 +7,30 @@ class CPU:
         # This is the instruction set
         # Each hexa corresponds to a action
     self.OPCODES = {
-        'NOP':      0x00,
-        'LOAD':     0x01,
-        'MOV':      0x02,
-        'STORE':    0x03,
-        'ADD':      0x04,
-        'SUB':      0x05,
-        'CMP':      0x06,
-        'JMP':      0x07,
-        'JZ':       0x08,
-        'JNZ':      0x09,
-        'AND':      0x0A,
-        'OR':       0x0B,
-        'XOR':      0x0C,
-        'NOT':      0x0D,
-        'SHL':      0x0E,
-        'SHR':      0x0F,
-        'LOAD_MEM': 0x20,
-        'PUSH':     0x21,
-        'POP':      0x22,
-        'CALL':     0x23,
-        'RET':      0x24,
-        'HLT':      0xFF,
-    }        
+        0x00: 'NOP',
+        0x01: 'LOAD',
+        0x02: 'MOV',
+        0x03: 'STORE',
+        0x04: 'ADD',
+        0x05: 'SUB',
+        0x06: 'CMP',
+        0x07: 'JMP',
+        0x08: 'JZ',
+        0x09: 'JNZ',
+        0x0A: 'AND',
+        0x0B: 'OR',
+        0x0C: 'XOR',
+        0x0D: 'NOT',
+        0x0E: 'SHL',
+        0x0F: 'SHR',
+        0x20: 'LOAD_MEM',
+        0x21: 'PUSH',
+        0x22: 'POP',
+        0x23: 'CALL',
+        0x24: 'RET',
+        0xFF: 'HLT',
+    }
+        
 
         # Used for the HLT
         self.running = True
@@ -197,7 +198,7 @@ class CPU:
         elif instruction == 'POP':
             sp = self.reg.read('SP')  
 
-            if sp < 0xFF
+            if sp < 0xFF:
                 sp += 1
                 value = self.memory.read(sp)
                 self.reg.write(f"R{self.arg1}", value)

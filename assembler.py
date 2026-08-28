@@ -20,11 +20,11 @@ class Assembler():
             'NOT':   0x0D,
             'SHL':   0x0E,
             'SHR':   0x0F,
-            'LOAD_MEM' 0x20, 
-            'PUSH'   0x21,
-            'POP'    0x23,
-            'CALL'   0x24,
-            'RET'    0x25,
+            'LOAD_MEM': 0x20, 
+            'PUSH':   0x21,
+            'POP':    0x22,
+            'CALL':   0x23,
+            'RET':    0x24,
             'HLT':   0xFF, 
         }
 

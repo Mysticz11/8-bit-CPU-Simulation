@@ -1,0 +1,16 @@
+LOAD R0, 0
+LOAD R1, 3
+LOAD R2, 4
+LOAD R3, 1
+loop:
+ADD R0, R1
+PUSH R0
+MOV R0, R2
+SUB R0, R3
+MOV R2, R0
+POP R0
+JZ done
+JMP loop
+done:
+STORE R0, 0x80
+HLT
