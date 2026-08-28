@@ -41,6 +41,42 @@ class ALU():
 
         self._update_flags(result, raw_result)
 
+    # Bitwise operations
+
+    def and_op(self, val1, val2):
+        result = val1 & val2
+        self._update_flags(result, result)
+        return result
+
+    def or_op(self, val1, val2):
+        result = val1 | val2
+        self._update_flags(result, result)
+        return result
+
+    def xor_op(self, val1, val2): 
+        result = val1 ^ val2
+        self._update_flags(result, result)
+        return result
+
+    def not_op(self, val):
+        result = ~val & 0xFF
+        self._update_flags(result, result)
+        return result
+
+    # Shifting left moves up to higher values, so masking is needed to make sure it doesnt overflow.
+    # Shifting right doesnt have this issue, since anything below zero doesnt exist (in this CPU that is)
+
+    def shiftl(self, val):
+        raw_result = val << 1
+        result = raw_result & 0xFF
+        self._update_flags(result, raw_result)
+        return result
+
+    def shiftr(self, val):
+        result = val >> 1
+        self._update_flags(result, result)
+        return result
+
     # Helper method since I don't want to retype this everywhere
     # underscore at the beggining of the name is apparantly naming conventions
     def _update_flags(self, result, raw_result):

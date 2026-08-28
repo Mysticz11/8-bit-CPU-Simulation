@@ -6,21 +6,32 @@ class CPU:
     def __init__(self):
         # This is the instruction set
         # Each hexa corresponds to a action
-        self.OPCODES = {
-        0x00: 'NOP',
-        0x01: 'LOAD',
-        0x02: 'MOV',
-        0x03: 'STORE',
-        0x04: 'ADD',
-        0x05: 'SUB',
-        0x06: 'CMP',
-        0x07: 'JMP',
-        0x08: 'JZ',
-        0x09: 'JNZ',
-        0xFF: 'HLT'
-        }
-        
-        # Used for the HLt
+    self.OPCODES = {
+        'NOP':      0x00,
+        'LOAD':     0x01,
+        'MOV':      0x02,
+        'STORE':    0x03,
+        'ADD':      0x04,
+        'SUB':      0x05,
+        'CMP':      0x06,
+        'JMP':      0x07,
+        'JZ':       0x08,
+        'JNZ':      0x09,
+        'AND':      0x0A,
+        'OR':       0x0B,
+        'XOR':      0x0C,
+        'NOT':      0x0D,
+        'SHL':      0x0E,
+        'SHR':      0x0F,
+        'LOAD_MEM': 0x20,
+        'PUSH':     0x21,
+        'POP':      0x22,
+        'CALL':     0x23,
+        'RET':      0x24,
+        'HLT':      0xFF,
+    }        
+
+        # Used for the HLT
         self.running = True
 
         # Initializing CLasses
@@ -139,6 +150,72 @@ class CPU:
         elif instruction == 'JNZ':
             if self.reg.get_flag('Z') != 1:
                 self.reg.write('PC', self.arg1)
+
+        elif instruction == 'AND':
+            value1 = self.reg.read(f"R{self.arg1}")
+            value2 = self.reg.read(f"R{self.arg2}")
+            result = self.alu.and_op(value1, value2)
+            self.reg.write('R0', result)
+
+        elif instruction == 'OR':
+            value1 = self.reg.read(f"R{self.arg1}")
+            value2 = self.reg.read(f"R{self.arg2}")
+            result = self.alu.or_op(value1, value2)
+            self.reg.write('R0', result)
+
+        elif instruction == 'XOR':
+            value1 = self.reg.read(f"R{self.arg1}")
+            value2 = self.reg.read(f"R{self.arg2}")
+            result = self.alu.xor_op(value1, value2)
+            self.reg.write('R0', result)
+
+        elif instruction == 'NOT':
+            value = self.reg.read(f"R{self.arg1}")
+            result = self.alu.not_op(value)
+            self.reg.write('R0', result)
+
+        elif instruction == 'SHL':
+            value = self.reg.read(f"R{self.arg1}")
+            result = self.alu.shiftl(value)
+            self.reg.write('R0', result)
+
+        elif instruction == 'SHR':
+            value = self.reg.read(f"R{self.arg1}")
+            result = self.alu.shiftr(value)
+            self.reg.write('R0', result)
+
+        elif instruction == 'LOAD_MEM':
+            value = self.memory.read(self.arg2)
+            self.reg.write(f"R{self.arg1}", value)
+        
+        elif instruction == 'PUSH':
+            value = self.reg.read(f"R{self.arg1}")
+            sp = self.reg.read('SP')        
+            self.memory.write(sp, value)
+            self.reg.write('SP', sp - 1)
+        
+        elif instruction == 'POP':
+            sp = self.reg.read('SP')  
+
+            if sp < 0xFF
+                sp += 1
+                value = self.memory.read(sp)
+                self.reg.write(f"R{self.arg1}", value)
+                self.reg.write('SP', sp)
+        
+        elif instruction == 'CALL':
+            pc = self.reg.read('PC')
+            sp = self.reg.read('SP')    
+            self.memory.write(sp, pc)
+            self.reg.write('PC', self.arg1)
+            self.reg.write('SP', sp - 1)
+            
+        elif instruction == 'RET':
+            sp = self.reg.read('SP') + 1
+            new_pc = self.memory.read(sp)
+            self.reg.write('PC', new_pc)
+            self.reg.write('SP', sp)
+
         # Stops the program
         elif instruction == "HLT":
             self.running = False
