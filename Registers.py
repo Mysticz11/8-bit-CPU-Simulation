@@ -16,6 +16,7 @@ class Registers:
         'IR': 0,
         'MDR': 0,
         'MAR': 0,
+        'SP': 0xFF,
         }
 
         self.flags = {

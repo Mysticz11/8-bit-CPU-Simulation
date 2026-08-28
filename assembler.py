@@ -4,18 +4,30 @@ class Assembler():
         # Opcodes to be used later
         # Converts the string instruction to binary
         self.OPCODES = {
-            'NOP': 0x00,
-            'LOAD': 0x01,
-            'MOV': 0x02,
+            'NOP':   0x00,
+            'LOAD':  0x01,
+            'MOV':   0x02,
             'STORE': 0x03,
-            'ADD': 0x04,
-            'SUB': 0x05,
-            'CMP': 0x06,
-            'JMP': 0x07,
-            'JZ': 0x08,
-            'JNZ': 0x09,
-            'HLT': 0xFF
+            'ADD':   0x04,
+            'SUB':   0x05,
+            'CMP':   0x06,
+            'JMP':   0x07,
+            'JZ':    0x08,
+            'JNZ':   0x09,
+            'AND':   0x0A,
+            'OR':    0x0B,
+            'XOR':   0x0C,
+            'NOT':   0x0D,
+            'SHL':   0x0E,
+            'SHR':   0x0F,
+            'LOAD_MEM' 0x20, 
+            'PUSH'   0x21,
+            'POP'    0x23,
+            'CALL'   0x24,
+            'RET'    0x25,
+            'HLT':   0xFF, 
         }
+
 
         # Same thing but for registers
         self.register_map = {
