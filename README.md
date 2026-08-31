@@ -1,9 +1,8 @@
 # 8-Bit CPU Simulator
 
-An 8-bit CPU simulator written from scratch in Python. The project includes a custom instruction set, assembler, debugger, and stack-based subroutine support.
+An 8-bit CPU simulator written from scratch in Python. The project includes a custom instruction set, assembler, debugger, and stack-based subroutine support. The CPU uses a 256-byte memory space and implements a basic fetch-decode-execute cycle, allowing assembly programs to be loaded and executed instruction by instruction. The next goal is to port this CPU simulator onto SystemVerilog. 
 
-The CPU uses a 256-byte memory space and implements a basic fetch-decode-execute cycle, allowing assembly programs to be loaded and executed instruction by instruction.
-
+See the research and design notes for further design choices. 
 
 ## Architecture
 
